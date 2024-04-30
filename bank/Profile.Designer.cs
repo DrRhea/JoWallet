@@ -186,7 +186,7 @@
             this.lblName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblName.Size = new System.Drawing.Size(84, 23);
             this.lblName.TabIndex = 9;
-            this.lblName.Text = "JoWallet";
+            this.lblName.Text = userName;
             this.lblName.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.lblName.TextFormat = Bunifu.UI.WinForms.BunifuLabel.TextFormattingOptions.Default;
             // 
@@ -307,7 +307,7 @@
             this.lblUser.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblUser.Size = new System.Drawing.Size(84, 23);
             this.lblUser.TabIndex = 11;
-            this.lblUser.Text = "JoWallet";
+            this.lblUser.Text = userName;
             this.lblUser.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.lblUser.TextFormat = Bunifu.UI.WinForms.BunifuLabel.TextFormattingOptions.Default;
             // 

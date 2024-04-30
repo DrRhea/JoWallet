@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,20 +10,48 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Bunifu.UI.WinForms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Data.SQLite; 
 
 namespace bank
 {
     public partial class Profile : Form
     {
         private string actualAccountId = "1234567890";
+        private string userName;
 
         public Profile()
         {
             InitializeComponent();
             this.DoubleBuffered = true;
         }
+        
+        private string GetUserNameFromDatabase(int userId)
+        {
+            // Ambil string koneksi dari app.config
+            string connectionString = ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
 
-        private void SetButtonHoverEffects(PictureBox btn, Image hoverImage, Image normalImage)
+            // Koneksi ke database SQLite
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                // Query untuk mengambil nama pengguna dari tabel user
+                string query = "SELECT name FROM login WHERE id = @UserId";
+                SQLiteCommand command = new SQLiteCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+
+                // Eksekusi query dan ambil hasil
+                object result = command.ExecuteScalar();
+
+                // Tutup koneksi
+                connection.Close();
+
+                // Kembalikan nama pengguna jika ada, atau nilai default jika tidak ada
+                return result != null ? result.ToString() : "Nama Pengguna";
+            }
+        }
+
+            private void SetButtonHoverEffects(PictureBox btn, Image hoverImage, Image normalImage)
         {
             btn.MouseHover += (sender, e) => {
                 btn.Image = hoverImage;
@@ -66,6 +95,13 @@ namespace bank
             btnNotifON.Visible = false;
             btnShow.Visible = false;
             HoverLeaverButtons();
+            
+            // Retrieve user's name from the database
+            userName = GetUserNameFromDatabase(1);
+
+            // Update the labels
+            lblName.Text = userName;
+            lblUser.Text = userName;
         }
 
         private void btnShow_Click(object sender, EventArgs e)

@@ -48,12 +48,59 @@ namespace bank
                     Menu customerForm = new Menu();
                     this.Hide();
                     customerForm.Show();
+                    SaveLoginInformation(tel, pin);
                 }
                 else
                 {
                     MessageBox.Show("Customer credentials are incorrect");
                 }
             }
+        }
+        
+        private void SaveLoginInformation(string tel, string pin)
+        {
+            string name = GetUserName(tel); // Mendapatkan nama pengguna berdasarkan nomor telepon
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
+
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "UPDATE login SET id = 1, name = @Name, tel = @Tel, pin = @Pin WHERE id = 1";
+                    SQLiteCommand command = new SQLiteCommand(query, connection);
+                    command.Parameters.AddWithValue("@Name", name);
+                    command.Parameters.AddWithValue("@Tel", tel);
+                    command.Parameters.AddWithValue("@Pin", pin);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+        
+        private string GetUserName(string tel)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
+            string name = "";
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT user FROM user WHERE tel = @Tel";
+                SQLiteCommand command = new SQLiteCommand(query, connection);
+                command.Parameters.AddWithValue("@Tel", tel);
+
+                object result = command.ExecuteScalar();
+                if (result != null)
+                {
+                    name = result.ToString();
+                }
+            }
+
+            return name;
         }
 
         private bool IsUserCredentialsValid(string tel, string pin)
