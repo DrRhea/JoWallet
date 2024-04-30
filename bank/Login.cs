@@ -60,6 +60,7 @@ namespace bank
         private void SaveLoginInformation(string tel, string pin)
         {
             string name = GetUserName(tel); // Mendapatkan nama pengguna berdasarkan nomor telepon
+            int id = GetUserId(tel); // Mendapatkan id pengguna berdasarkan nomor telepon
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -69,8 +70,9 @@ namespace bank
                 {
                     connection.Open();
 
-                    string query = "UPDATE login SET id = 1, name = @Name, tel = @Tel, pin = @Pin WHERE id = 1";
+                    string query = "UPDATE login SET id = 1, id_user = @IdUser, name = @Name, tel = @Tel, pin = @Pin WHERE id = 1";
                     SQLiteCommand command = new SQLiteCommand(query, connection);
+                    command.Parameters.AddWithValue("@IdUser", id);
                     command.Parameters.AddWithValue("@Name", name);
                     command.Parameters.AddWithValue("@Tel", tel);
                     command.Parameters.AddWithValue("@Pin", pin);
@@ -101,6 +103,29 @@ namespace bank
             }
 
             return name;
+        }
+        
+        private int GetUserId(string tel)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
+            int id = 0; // Ubah tipe data menjadi int dan inisialisasi dengan nilai default 0
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT id FROM user WHERE tel = @Tel";
+                SQLiteCommand command = new SQLiteCommand(query, connection);
+                command.Parameters.AddWithValue("@Tel", tel);
+
+                object result = command.ExecuteScalar();
+                if (result != null && result != DBNull.Value) // Periksa jika hasil kueri bukan null atau DBNull
+                {
+                    id = Convert.ToInt32(result); // Konversi hasil kueri menjadi int
+                }
+            }
+
+            return id;
         }
 
         private bool IsUserCredentialsValid(string tel, string pin)

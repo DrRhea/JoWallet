@@ -1,5 +1,6 @@
 ﻿using CircularProgressBar;
 using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,16 +9,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SQLite; 
 
 namespace bank
 {
     public partial class Menu : Form
+    
     {
         bool siderbarExpand;
         bool transactionCollapsed = false;
         bool accountCollapsed = false;
 
         public string actualSaldo = "999.110";
+        private string userName;
 
         public Menu()
         {
@@ -27,11 +31,14 @@ namespace bank
 
         private void Menu_Load(object sender, EventArgs e)
         {
+            userName = GetUserNameFromDatabase();
+            UpdateDateTimeAndGreeting(userName);
+            
             Timer timer = new Timer();
             timer.Interval = 60000; 
-            timer.Tick += (s, args) => UpdateDateTimeAndGreeting();
+            timer.Tick += (s, args) => UpdateDateTimeAndGreeting(userName);
             timer.Start();
-            UpdateDateTimeAndGreeting();
+            UpdateDateTimeAndGreeting(userName);
 
             btnHide.Visible = false;
             lblGreet.Visible = false;
@@ -42,6 +49,31 @@ namespace bank
 
             decimal saldo = 999000;
             setRoles(saldo);
+        }
+        
+        private string GetUserNameFromDatabase()
+        {
+            string tel = ""; // Gantilah dengan nomor telepon pengguna yang login
+
+            string connectionString = ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
+            string userName = "";
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT name FROM login WHERE id = 1";
+                SQLiteCommand command = new SQLiteCommand(query, connection);
+                command.Parameters.AddWithValue("@Tel", tel);
+
+                object result = command.ExecuteScalar();
+                if (result != null)
+                {
+                    userName = result.ToString();
+                }
+            }
+
+            return userName;
         }
 
         private void setRoles(decimal amount)
@@ -218,25 +250,25 @@ namespace bank
             timerAccount.Start();
         }
 
-        private void UpdateDateTimeAndGreeting()
+        private void UpdateDateTimeAndGreeting(string name)
         {
             DateTime now = DateTime.Now;
 
             string formattedDate = now.ToString("ddd, dd MMMM");
             labelDate.Text = formattedDate;
 
-            string greeting;
+            string greeting = "";
             if (now.Hour < 12)
             {
-                greeting = "Selamat pagi, User!";
+                greeting = $"Selamat pagi, {name}!";
             }
             else if (now.Hour < 17)
             {
-                greeting = "Selamat siang, User!";
+                greeting = $"Selamat siang, {name}!";
             }
             else
             {
-                greeting = "Selamat sore, User!";
+                greeting = $"Selamat sore, {name}!";
             }
 
             labelGreetings.Text = greeting;

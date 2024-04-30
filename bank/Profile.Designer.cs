@@ -169,7 +169,7 @@
             this.lblid.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblid.Size = new System.Drawing.Size(146, 23);
             this.lblid.TabIndex = 10;
-            this.lblid.Text = "0000-0000-0000";
+            this.lblid.Text = "";
             this.lblid.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.lblid.TextFormat = Bunifu.UI.WinForms.BunifuLabel.TextFormattingOptions.Default;
             // 
@@ -290,7 +290,7 @@
             this.lblExpierd.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblExpierd.Size = new System.Drawing.Size(53, 23);
             this.lblExpierd.TabIndex = 13;
-            this.lblExpierd.Text = "00/00";
+            this.lblExpierd.Text = "";
             this.lblExpierd.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.lblExpierd.TextFormat = Bunifu.UI.WinForms.BunifuLabel.TextFormattingOptions.Default;
             // 
@@ -324,7 +324,7 @@
             this.lblVirtualID.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblVirtualID.Size = new System.Drawing.Size(158, 24);
             this.lblVirtualID.TabIndex = 12;
-            this.lblVirtualID.Text = "0000-0000-0000";
+            this.lblVirtualID.Text = "";
             this.lblVirtualID.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.lblVirtualID.TextFormat = Bunifu.UI.WinForms.BunifuLabel.TextFormattingOptions.Default;
             // 
