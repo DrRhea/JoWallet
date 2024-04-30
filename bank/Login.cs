@@ -23,13 +23,13 @@ namespace bank
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
-            string username = tbNumber.Text;
-            string password = tbPin.Text;
+            string tel = tbNumber.Text;
+            string pin = tbPin.Text;
 
             if (cbAdmin.Checked)
             {
                 // Penanganan login untuk admin
-                if (IsAdminCredentialsCorrect(username, password))
+                if (IsAdminCredentialsCorrect(tel, pin))
                 {
                     Admin adminForm = new Admin();
                     this.Hide();
@@ -43,7 +43,7 @@ namespace bank
             else
             {
                 // Penanganan login untuk customer
-                if (IsUserCredentialsValid(username, password))
+                if (IsUserCredentialsValid(tel, pin))
                 {
                     Menu customerForm = new Menu();
                     this.Hide();
@@ -56,23 +56,19 @@ namespace bank
             }
         }
 
-        private bool IsUserCredentialsValid(string username, string password)
+        private bool IsUserCredentialsValid(string tel, string pin)
         {
-            // Ambil string koneksi dari app.config
             string connectionString = ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
 
-            // Koneksi ke database SQLite
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
 
-                // Query untuk memeriksa keberadaan user dengan username dan password yang diberikan
-                string query = "SELECT COUNT(*) FROM user WHERE user = @Username AND pin = @Password";
+                string query = "SELECT COUNT(*) FROM user WHERE tel = @Tel AND pin = @Pin";
                 SQLiteCommand command = new SQLiteCommand(query, connection);
-                command.Parameters.AddWithValue("@Username", username);
-                command.Parameters.AddWithValue("@Password", password);
+                command.Parameters.AddWithValue("@Tel", tel);
+                command.Parameters.AddWithValue("@Pin", pin);
 
-                // Eksekusi query dan periksa hasil
                 int count = Convert.ToInt32(command.ExecuteScalar());
                 return count > 0;
             }
