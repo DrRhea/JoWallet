@@ -1059,7 +1059,7 @@
             this.labelGreetings.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.labelGreetings.Size = new System.Drawing.Size(142, 21);
             this.labelGreetings.TabIndex = 20;
-            this.labelGreetings.Text = "Welcome, jowallet";
+            this.labelGreetings.Text = "Welcome, JoWallet";
             this.labelGreetings.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.labelGreetings.TextFormat = Bunifu.UI.WinForms.BunifuLabel.TextFormattingOptions.Default;
             // 
