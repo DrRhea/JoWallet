@@ -51,7 +51,7 @@ namespace bank
                 }
                 else
                 {
-                    MessageBox.Show("Customer credentials are incorrect.");
+                    MessageBox.Show("Customer credentials are incorrect");
                 }
             }
         }
